@@ -1,5 +1,7 @@
 FROM debian:jessie
 
+MAINTAINER Alex Schmoe <alex@getproudcity.com>
+
 # Keep upstart from complaining
 RUN dpkg-divert --local --rename --add /sbin/initctl
 RUN ln -sf /bin/true /sbin/initctl
@@ -50,13 +52,22 @@ ENV WORDPRESS_UPSTREAM_VERSION 4.2.2
 ENV WORDPRESS_SHA1 d3a70d0f116e6afea5b850f793a81a97d2115039
 
 # upstream tarballs include ./wordpress/ so this gives us /usr/src/wordpress
-RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_UPSTREAM_VERSION}.tar.gz \
-	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
-	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
-	&& rm wordpress.tar.gz
+# RUN curl -o wordpress.tar.gz -SL https://wordpress.org/wordpress-${WORDPRESS_UPSTREAM_VERSION}.tar.gz \
+#	&& echo "$WORDPRESS_SHA1 *wordpress.tar.gz" | sha1sum -c - \
+#	&& tar -xzf wordpress.tar.gz -C /usr/src/ \
+#	&& rm wordpress.tar.gz
 
 ADD ./docker-entrypoint.sh /entrypoint.sh
 ADD ./config.yml /root/.wp-cli/
+
+# Get proud-composer
+RUN git clone https://github.com/proudcity/wp-proud-composer.git /user/src/wordpress
+
+WORKDIR /user/src/wordpress
+
+Install composer
+RUN curl -sS https://getcomposer.org/installer | php \
+  && php composer.phar install
 
 WORKDIR /var/www/html
 
