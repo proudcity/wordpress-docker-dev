@@ -1,4 +1,42 @@
-# ProudCity Wordpress
+# Wordpress Docker image for Plugin, Theme and MultiSite Development
+
+This image is intended for *local development only*. It runs Nginx and PHP-FPM as the *root user* so that Docker volumes mounted at /var/www/html can be written by the server processes.
+
+This is totally awesome for local theme and plugin development, and the worst of all possible worlds if it happens to end up on a real server, so don't. Just don't. :simple_smile:
+
+## Usage
+
+For more detail, see this [initial blog post](http://goldsounds.com/archives/2015/04/06/quick-and-easy-wordpress-development-using-docker/) and the follow up where I [enable multi-site](http://goldsounds.com/archives/2015/04/16/docker-for-wordpress-multisite-development/).
+
+I use this image with [Docker Compose](https://docs.docker.com/compose/), thusly:
+
+0. Install Docker and Docker Compose. Instructions will vary depending on your system.
+
+1. Save the following in a repo somewhere as docker-compose.yml:
+
+```yaml
+wordpress:
+  image: gravityrail/wordpress
+  volumes:
+    - src:/var/www/html
+  links:
+    - db:mysql
+  ports:
+    - 8080:80
+
+db:
+  image: mariadb
+  environment:
+    MYSQL_ROOT_PASSWORD: example
+```
+
+2. Create a directory call "src" in the same directory as docker-compose.yml
+
+3. Run `docker-compose up`. This will boot the WordPress and MariaDB docker images, install WordPress to your "src" directory, and run the server process.
+
+4. run `open "http://$(boot2docker ip):8080"`, and install (for Linux, YMMV)
+
+You can now install themes and plugins and mess with WordPress as much as you like!
 
 ## Scripting the container with wp-cli
 
