@@ -65,7 +65,7 @@ RUN git clone https://github.com/proudcity/wp-proud-composer.git /user/src/wordp
 
 WORKDIR /user/src/wordpress
 
-Install composer
+# Install composer
 RUN curl -sS https://getcomposer.org/installer | php \
   && php composer.phar install
 
