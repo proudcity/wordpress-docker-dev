@@ -38,8 +38,8 @@ RUN /usr/bin/easy_install supervisor-stdout
 ADD ./supervisord.conf /etc/supervisord.conf
 
 # install wp-cli
-RUN wget https://github.com/wp-cli/builds/raw/gh-pages/deb/php-wpcli_0.17.1_all.deb
-RUN dpkg -i php-wpcli_0.17.1_all.deb
+RUN wget https://github.com/wp-cli/builds/raw/gh-pages/deb/php-wpcli_0.22.0_all.deb
+RUN dpkg -i php-wpcli_0.22.0_all.deb
 
 # install wp-cli server command
 RUN mkdir -p ~/.wp-cli/commands
